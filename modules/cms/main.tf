@@ -1,6 +1,6 @@
 locals {
   application = "circleci"
-  prefix      = "${local.application}=${var.stack}"
+  prefix      = "${local.application}-${var.stack}"
 }
 
 data "aws_region" "current" {}
@@ -19,9 +19,10 @@ module "network" {
 
 module "circleci" {
   source                   = "../../"
-  aws_vpc_id               = ""
-  aws_subnet_id            = ""
+  aws_vpc_id               = "${module.network.vpc_id}"
+  aws_subnet_id            = "${module.network.public_subnet_ids[0]}"
   aws_region               = "${data.aws_region.current.name}"
   aws_ssh_key_name         = ""
   circle_secret_passphrase = ""
+  prefix                   = "${local.prefix}"
 }
