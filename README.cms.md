@@ -10,6 +10,7 @@ repository.
   - Disable the public IP of of the services host.
   - Disable provider configuration, use parent environment, remove from variables.tf
   - Add outputs.tf to expose select id's of created resources.
+  - add ${path.module} to template files
 - Create a cms module and env directories for each deployment.
   - Pull network and tag configuration from West pipelines.
   - Create LB and security group for services host.
