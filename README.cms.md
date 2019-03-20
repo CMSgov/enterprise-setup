@@ -14,6 +14,7 @@ repository.
 - Create a cms module and env directories for each deployment.
   - Pull network and tag configuration from West pipelines.
   - Create LB and security group for services host.
+  - Creates a certificate in ACM (validation needs to be done after the fact)
 
 ## Approach
 
@@ -33,4 +34,22 @@ terraform and creates any additional CMS resources.
 This follows the CMS West procedure for bootstrapping and environment. The
 bootstrap/* directory contains terraform setup for creating buckets in all environments.
 
-##
+## Creating a new environment
+
+1. Setup bootstrap directory and terraform apply.
+    - Create a new directory with your account in /bootstrap
+    - Copy a main.tf from an existing and update the `locals` parameters
+    - Run `terraform init && terraform -out plan.out`, review then `terraform apply plan.out`
+    - Add `main.tf`, and `terraform.tfstate` to git and push.
+
+2. Create application environment and terraform it into existence
+
+    - Create a new directory in /envs/ENV/ and copy the dev main.tf to it.
+    - Edit main.tf and set the variables in local, and update the terraform config.
+    - Create environment by `terraform init && terraform plan -out plan.out`. Review then `terraform plan.out`
+
+3. Verify ACM certificate
+
+    - Use the output from the above plan and setup the required CNAMES, one for the fqdn you specifid, and the other for ACM.
+
+4. Perform Circle online setup.
