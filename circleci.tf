@@ -37,12 +37,13 @@ data "template_file" "output" {
     ssh_key            = "${var.aws_ssh_key_name}"
   }
 }
-
+/*
 provider "aws" {
   access_key = "${var.aws_access_key}"
   secret_key = "${var.aws_secret_key}"
   region     = "${var.aws_region}"
 }
+*/
 
 module "shutdown_sqs" {
   source = "./modules/aws_sqs"
