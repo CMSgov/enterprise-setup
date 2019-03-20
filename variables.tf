@@ -1,4 +1,4 @@
-/*
+/* CMS: Disable secret passing into this module
 variable "aws_access_key" {
   description = "Access key used to create instances"
 }

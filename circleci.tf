@@ -3,6 +3,7 @@ data "aws_subnet" "subnet" {
 }
 
 data "template_file" "services_user_data" {
+  // CMS: add path.module
   template = "${file("${path.module}/templates/services_user_data.tpl")}"
 
   vars {
@@ -19,6 +20,7 @@ data "template_file" "services_user_data" {
 }
 
 data "template_file" "circleci_policy" {
+  // CMS: add path.module
   template = "${file("${path.module}/templates/circleci_policy.tpl")}"
 
   vars {
@@ -30,6 +32,7 @@ data "template_file" "circleci_policy" {
 }
 
 data "template_file" "output" {
+  // CMS: add path.module
   template = "${file("${path.module}/templates/output.tpl")}"
 
   vars {
@@ -37,7 +40,7 @@ data "template_file" "output" {
     ssh_key            = "${var.aws_ssh_key_name}"
   }
 }
-/*
+/* CMS: remove AWS configuration in module
 provider "aws" {
   access_key = "${var.aws_access_key}"
   secret_key = "${var.aws_secret_key}"
@@ -72,6 +75,7 @@ resource "aws_s3_bucket" "circleci_bucket" {
 resource "aws_iam_role" "circleci_role" {
   name               = "${var.prefix}_role"
   path               = "/"
+  // CMS: add path.module
   assume_role_policy = "${file("${path.module}/files/circleci_role.json")}"
 }
 
@@ -280,6 +284,7 @@ resource "aws_instance" "services" {
   ami                         = "${var.services_ami != "" ? var.services_ami : lookup(var.ubuntu_ami, var.aws_region)}"
   key_name                    = "${var.aws_ssh_key_name}"
   subnet_id                   = "${var.aws_subnet_id}"
+  // CMS: disable public IP
   #associate_public_ip_address = true
   disable_api_termination     = "${var.services_disable_api_termination}"
   iam_instance_profile        = "${aws_iam_instance_profile.circleci_profile.name}"
