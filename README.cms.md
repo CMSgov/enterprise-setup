@@ -31,7 +31,7 @@ terraform and creates any additional CMS resources.
 
 ## Bootstrapping
 
-This follows the CMS West procedure for bootstrapping and environment. The
+We follow the CMS West procedure for bootstrapping and environment. The
 bootstrap/* directory contains terraform setup for creating buckets in all environments.
 
 ## Creating a new environment
@@ -53,3 +53,28 @@ bootstrap/* directory contains terraform setup for creating buckets in all envir
     - Use the output from the above plan and setup the required CNAMES, one for the fqdn you specifid, and the other for ACM.
 
 4. Perform Circle online setup.
+
+---
+
+## Troubleshooting
+
+When creating a new environment, you may encounter an error creating aws_lb_listeners.
+This is due to ACM not validating the certificate. To handle validation, you will
+need to:
+
+  1. Go to the AWS console and get the dns validation record for your DNS, (or run `terraform output`)
+  2. Install the requested CNAME
+  3. Re-run terraform plan/apply once ACM shows the certificate validated
+
+Example Error:
+
+```text
+ module.app.aws_lb_listener.https8800: 1 error(s) occurred:
+
+* aws_lb_listener.https8800: Error creating LB Listener: CertificateNotFound: Certificate 'arn:aws:acm:us-west-2:664598445001:certificate/a823c69b-7aeb-46c7-b9d7-3727b90adf81' not found
+        status code: 400, request id: 5848d2c0-4bd7-11e9-b5a2-f9406cfc5cc7
+* module.app.aws_lb_listener.https: 1 error(s) occurred:
+
+* aws_lb_listener.https: Error creating LB Listener: CertificateNotFound: Certificate 'arn:aws:acm:us-west-2:664598445001:certificate/a823c69b-7aeb-46c7-b9d7-3727b90adf81' not found
+        status code: 400, request id: 58387f2a-4bd7-11e9-943f-b5cd56d4e453
+```

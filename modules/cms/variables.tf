@@ -3,6 +3,11 @@ variable "stack" {
 }
 
 variable "fqdn" {
-  type = "string"
+  type        = "string"
   description = "FQDN that this circle instance will listen on. Used to request an ACM certificate."
+}
+
+variable "aws_ssh_key_name" {
+  description = "Optional ssh key to install"
+  default     = ""
 }
