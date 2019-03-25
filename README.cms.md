@@ -15,6 +15,7 @@ repository.
   - Pull network and tag configuration from West pipelines.
   - Create LB and security group for services host.
   - Creates a certificate in ACM (validation needs to be done after the fact)
+  - Configures SES for email sending.
 
 ## Approach
 
@@ -50,9 +51,14 @@ bootstrap/* directory contains terraform setup for creating buckets in all envir
 
 3. Verify ACM certificate
 
-    - Use the output from the above plan and setup the required CNAMES, one for the fqdn you specifid, and the other for ACM.
+    - Use the output from the above plan and setup the required CNAMES and TXT records for the following:
+        - CNAME for your fqdn to elb name.
+        - CNAME for ACM.
+        - TXT record for SES verification
+        - TXT records for SES DKIM verification
 
-4. Perform Circle online setup.
+4. In the AWS console -> SES -> SMTP Settings, you will need to create SMTP credentials to use. Save these and use in the circle setup.
+5. Perform Circle online setup.
 
 ---
 
