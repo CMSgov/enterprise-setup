@@ -1,6 +1,5 @@
 locals {
-  application = "circleci"
-  prefix      = "${local.application}-${var.stack}"
+  prefix = "${var.application}-${var.stack}"
 }
 
 #
@@ -23,18 +22,26 @@ module "circleci" {
 
   # TODO: Move this to param store
   circle_secret_passphrase = "setecastronomy"
+
+  ubuntu_ami = {
+    us-east-1 = "ami-0f9351b59be17920e"
+    us-west-2 = "ami-0afae182eed9d2b46"
+
+    # hvm ebs xenial 2018-11-06
+    us-gov-west-1 = "ami-3a86f05b"
+  }
 }
 
 data "aws_region" "current" {}
 
 module "tags" {
   source      = "git@github.com:CMSgov/CMS-AWS-West-Pipelines.git//terraform/modules/cms-tags"
-  application = "${local.application}"
+  application = "${var.application}"
   stack       = "${var.stack}"
 }
 
 module "network" {
   source      = "git@github.com:CMSgov/CMS-AWS-West-Pipelines.git//terraform/modules/network-v4"
-  application = "${local.application}"
+  application = "${var.application}"
   stack       = "${var.stack}"
 }
