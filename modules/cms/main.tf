@@ -1,5 +1,12 @@
 locals {
   prefix = "${var.application}-${var.stack}"
+
+# map of region to arn prefix to use
+  arn_prefix = {
+    us-west-2     = "aws"
+    us-east-1     = "aws"
+    us-gov-west-1 = "aws-us-gov"
+  }
 }
 
 #
@@ -13,6 +20,7 @@ module "circleci" {
   aws_subnet_id = "${module.network.private_subnet_ids[0]}"
   aws_region    = "${data.aws_region.current.name}"
   prefix        = "${local.prefix}"
+  arn_prefix    = "${lookup(local.arn_prefix,data.aws_region.current.name)}"
 
   # Disable CircleCI 1.0 builders
   desired_builders_count = "0"
