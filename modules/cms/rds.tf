@@ -5,7 +5,7 @@
 # Define postgres ingress. This only allows access in from the ecs tasks
 #
 resource "aws_security_group" "postgres_ingress" {
-  name        = "${var.application}-${var.stack}-postgres-ingress"
+  name        = "${local.application}-${var.stack}-postgres-ingress"
   description = "allow inbound access from ECS tasks only"
   vpc_id      = "${module.network.vpc_id}"
   tags        = "${module.tags.application_tags}"
@@ -14,19 +14,19 @@ resource "aws_security_group" "postgres_ingress" {
     protocol        = "tcp"
     from_port       = "5432"
     to_port         = "5432"
-    security_groups = ["${module.testapp-service.ecs_security_group_ids}"]
+    security_groups = ["${module.circleci.circleci_services_sg_id}"]
   }
 }
 
 module "rds_postgres" {
   source = "terraform-aws-modules/rds/aws"
 
-  name              = "${data.aws_ssm_parameter.rds_app_db.value}"
-  identifier        = "${var.application}-${var.stack}-db"
+  name              = "${aws_ssm_parameter.rds_db_host.name}"
+  identifier        = "${local.application}-${var.stack}-db"
   engine            = "postgres"
   engine_version    = "10.6"
   instance_class    = "${var.rds_instance}"
-  allocated_storage = 5
+  allocated_storage = "${var.rds_allocated_storage}"
   storage_encrypted = true
 
   # uncomment to use specific/non-default key
@@ -35,7 +35,7 @@ module "rds_postgres" {
   # NOTE: Do NOT use 'user' as the value for 'username' as it throws:
   # "Error creating DB Instance: InvalidParameterValue: MasterUsername
   # user cannot be used as it is a reserved word used by the engine"
-  username = "${data.aws_ssm_parameter.rds_admin_user.value}"
+  username = "${data.aws_ssm_parameter.rds_admin_user.name}"
   password               = "${data.aws_ssm_parameter.rds_admin_pass.value}"
   port                   = "5432"
   vpc_security_group_ids = ["${aws_security_group.postgres_ingress.id}"]
@@ -57,7 +57,7 @@ module "rds_postgres" {
   # Enable enhanced monitoring
   # For this demo, we will create role automatically.
   create_monitoring_role = true
-  monitoring_role_name = "${var.application}-${var.stack}-rds-monitoring"
+  monitoring_role_name = "${local.application}-${var.stack}-rds-monitoring"
   monitoring_interval  = "30"
 }
 
