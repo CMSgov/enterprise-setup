@@ -5,7 +5,7 @@
 # Define postgres ingress. This only allows access in from the ecs tasks
 #
 resource "aws_security_group" "postgres_ingress" {
-  name        = "${local.application}-${var.stack}-postgres-ingress"
+  name        = "${local.prefix}-postgres-ingress"
   description = "allow inbound access from ECS tasks only"
   vpc_id      = "${module.network.vpc_id}"
   tags        = "${module.tags.application_tags}"
@@ -22,7 +22,7 @@ module "rds_postgres" {
   source = "terraform-aws-modules/rds/aws"
 
   name              = "${aws_ssm_parameter.rds_db_host.name}"
-  identifier        = "${local.application}-${var.stack}-db"
+  identifier        = "${local.prefix}-db"
   engine            = "postgres"
   engine_version    = "10.6"
   instance_class    = "${var.rds_instance}"
@@ -57,7 +57,7 @@ module "rds_postgres" {
   # Enable enhanced monitoring
   # For this demo, we will create role automatically.
   create_monitoring_role = true
-  monitoring_role_name = "${local.application}-${var.stack}-rds-monitoring"
+  monitoring_role_name = "${local.prefix}-rds-monitoring"
   monitoring_interval  = "30"
 }
 
@@ -65,7 +65,7 @@ module "rds_postgres" {
 # Store the RDS hostname in 'rds_db_host'
 #
 resource "aws_ssm_parameter" "rds_db_host" {
-  name      = "${local.ssm_prefix}rds_db_host"
+  name      = "${local.prefix}-rds_db_host"
   type      = "String"
   overwrite = true
   value     = "${module.rds_postgres.this_db_instance_address}"
@@ -75,9 +75,9 @@ resource "aws_ssm_parameter" "rds_db_host" {
 # SSM Parameters used by this application
 #
 data "aws_ssm_parameter" "rds_admin_user" {
-  name = "${local.ssm_prefix}rds_admin_user"
+  name = "${local.prefix}-rds_admin_user"
 }
 
 data "aws_ssm_parameter" "rds_admin_pass" {
-  name = "${local.ssm_prefix}rds_admin_pass"
+  name = "${local.prefix}-rds_admin_pass"
 }
