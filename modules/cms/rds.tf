@@ -21,7 +21,7 @@ resource "aws_security_group" "postgres_ingress" {
 module "rds_postgres" {
   source = "terraform-aws-modules/rds/aws"
 
-  name              = "${local.prefix}-rds_db_host"
+  name              = "${local.prefix}-db"
   identifier        = "${local.prefix}-db"
   engine            = "postgres"
   engine_version    = "10.6"
