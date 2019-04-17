@@ -1,6 +1,17 @@
 #
 # Externalize RDS.
 #
+# You will need to set AWS SSM parameters before you can provision RDS, like so:
+#   aws ssm put-parameter \
+#     --name circleci-REPLACEME_WITH_STACKNAME-rds_admin_user \
+#     --value REPLACEME_WITH_USERNAME \
+#     --type String
+#   aws ssm put-parameter \
+#     --name circleci-REPLACEME_WITH_STACKNAME-rds_admin_pass \
+#     --value REPLACEME_WITH_PASSWORD \
+#     --type String
+#
+
 #
 # Define postgres ingress. This only allows access in from the ecs tasks
 #
