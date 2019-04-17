@@ -9,7 +9,6 @@ variable "aws_secret_key" {
 */
 variable "aws_region" {
   description = "Region where instances get created"
-  default = "us-west-2"
 }
 
 variable "aws_vpc_id" {
