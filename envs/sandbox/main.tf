@@ -1,6 +1,6 @@
 locals {
   # UPDATE: set this to your stack (dev,prod,imp, etc)
-  stack = "sandbox"
+  stack = "dev" # TODO: update this to "sandbox" for clarity
 
   # UPDATE: set this to the front facing fqdn of your installation
   fqdn = "circle-sbx.west.cms.gov"
