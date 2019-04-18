@@ -3,7 +3,7 @@ locals {
   stack = "dev" # TODO: update this to "sandbox" for clarity
 
   # UPDATE: set this to the front facing fqdn of your installation
-  fqdn = "circle-sbx.west.cms.gov"
+  fqdn = "circle-sbx.west.cms.gov" # TODO: update this to circleci-sbx.west.cms.gov for consistency with dev and prod
 }
 
 module "app" {
