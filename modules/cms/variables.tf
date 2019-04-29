@@ -13,8 +13,9 @@ variable "aws_ssh_key_name" {
 }
 
 variable "rds_instance" {
-  type = "string"
+  type        = "string"
   description = "RDS postgres instance size"
+
   # CircleCI recommendations for <50 daily active CircleCI users are:
   #   8 cores, 16GB ram, 100GB disk space, 1 Gbps NIC speed, as per
   #   https://confluenceent.cms.gov/download/attachments/24089194/external-services.pdf?version=1&modificationDate=1553082082450&api=v2
@@ -25,7 +26,7 @@ variable "rds_instance" {
 }
 
 variable "rds_allocated_storage" {
-  type = "string"
+  type        = "string"
   description = "allocated RDS storage in gigabytes"
-  default = 100
+  default     = 100
 }
