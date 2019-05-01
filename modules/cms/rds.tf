@@ -3,11 +3,11 @@
 #
 # You will need to set AWS SSM parameters before you can provision RDS, like so:
 #   aws ssm put-parameter \
-#     --name circleci-REPLACEME_WITH_STACKNAME-rds_admin_user \
+#     --name circleci{REPLACEME_WITH_STACKNAME}adminuser \
 #     --value REPLACEME_WITH_USERNAME \
 #     --type String
 #   aws ssm put-parameter \
-#     --name circleci-REPLACEME_WITH_STACKNAME-rds_admin_pass \
+#     --name circleci{REPLACEME_WITH_STACKNAME}adminpass \
 #     --value REPLACEME_WITH_PASSWORD \
 #     --type String
 #
@@ -32,8 +32,9 @@ resource "aws_security_group" "postgres_ingress" {
 module "rds_postgres" {
   source = "terraform-aws-modules/rds/aws"
 
-  name              = "${local.prefix}-db"
-  identifier        = "${local.prefix}-db"
+  # db name only allows alphanumeric characters, so no hyphens
+  name              = "${var.application}${var.stack}db"
+  identifier        = "${var.application}${var.stack}db"
   engine            = "postgres"
   engine_version    = "10.6"
   instance_class    = "${var.rds_instance}"
@@ -76,7 +77,7 @@ module "rds_postgres" {
 # Store the RDS hostname in 'rds_db_host'
 #
 resource "aws_ssm_parameter" "rds_db_host" {
-  name      = "${local.prefix}-rds_db_host"
+  name      = "${local.prefix}-rds-db-host"
   type      = "String"
   overwrite = true
   value     = "${module.rds_postgres.this_db_instance_address}"
@@ -86,9 +87,9 @@ resource "aws_ssm_parameter" "rds_db_host" {
 # SSM Parameters used by this application
 #
 data "aws_ssm_parameter" "rds_admin_user" {
-  name = "${local.prefix}-rds_admin_user"
+  name = "${var.application}${var.stack}adminuser"
 }
 
 data "aws_ssm_parameter" "rds_admin_pass" {
-  name = "${local.prefix}-rds_admin_pass"
+  name = "${var.application}${var.stack}adminpass"
 }
