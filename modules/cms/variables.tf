@@ -30,3 +30,7 @@ variable "rds_allocated_storage" {
   description = "allocated RDS storage in gigabytes"
   default     = 100
 }
+
+variable "application" {
+  default = "circleci"
+}
