@@ -3,11 +3,11 @@
 #
 # You will need to set AWS SSM parameters before you can provision RDS, like so:
 #   aws ssm put-parameter \
-#     --name circleci{REPLACEME_WITH_STACKNAME}adminuser \
+#     --name circleci-REPLACEME_WITH_STACK_NAME-rds-admin-user \
 #     --value REPLACEME_WITH_USERNAME \
 #     --type String
 #   aws ssm put-parameter \
-#     --name circleci{REPLACEME_WITH_STACKNAME}adminpass \
+#     --name circleci-REPLACEME_WITH_STACK_NAME-rds-admin-pass \
 #     --value REPLACEME_WITH_PASSWORD \
 #     --type String
 #
@@ -47,7 +47,7 @@ module "rds_postgres" {
   # NOTE: Do NOT use 'user' as the value for 'username' as it throws:
   # "Error creating DB Instance: InvalidParameterValue: MasterUsername
   # user cannot be used as it is a reserved word used by the engine"
-  username = "${data.aws_ssm_parameter.rds_admin_user.name}"
+  username = "${data.aws_ssm_parameter.rds_admin_user.value}"
   password               = "${data.aws_ssm_parameter.rds_admin_pass.value}"
   port                   = "5432"
   vpc_security_group_ids = ["${aws_security_group.postgres_ingress.id}"]
@@ -87,9 +87,9 @@ resource "aws_ssm_parameter" "rds_db_host" {
 # SSM Parameters used by this application
 #
 data "aws_ssm_parameter" "rds_admin_user" {
-  name = "${var.application}${var.stack}adminuser"
+  name = "${local.prefix}-rds-admin-user"
 }
 
 data "aws_ssm_parameter" "rds_admin_pass" {
-  name = "${var.application}${var.stack}adminpass"
+  name = "${local.prefix}-rds-admin-pass"
 }
