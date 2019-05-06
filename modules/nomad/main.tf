@@ -61,6 +61,7 @@ resource "aws_launch_configuration" "clients_lc" {
   instance_type = "${var.instance_type}"
   image_id      = "${var.ami_id}"
   key_name      = "${var.aws_ssh_key_name}"
+  iam_instance_profile = "${var.prefix}-nomad-client"
 
   root_block_device = {
     volume_type = "gp2"
