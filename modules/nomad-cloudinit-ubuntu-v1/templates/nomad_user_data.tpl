@@ -87,3 +87,4 @@ echo "--------------------------------------"
 echo "      Starting Nomad service"
 echo "--------------------------------------"
 service nomad restart
+echo AWS_DEFAULT_REGION=us-gov-west-1 >> /etc/environment

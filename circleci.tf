@@ -87,6 +87,13 @@ resource "aws_iam_role_policy" "circleci_policy" {
   policy = "${data.template_file.circleci_policy.rendered}"
 }
 
+# CMS: Added policy attachment for ECR access.
+resource "aws_iam_policy_attachment" "ecr_access" {
+  name       = "${var.prefix}_ecr_access"
+  roles      = ["${aws_iam_role.circleci_role.id}"]
+  policy_arn = "arn:${var.arn_prefix}:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+}
+
 resource "aws_iam_instance_profile" "circleci_profile" {
   name = "${var.prefix}_profile"
   role = "${aws_iam_role.circleci_role.name}"
