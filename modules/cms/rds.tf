@@ -1,11 +1,7 @@
 #
 # Externalize RDS.
 #
-# You will need to set AWS SSM parameters before you can provision RDS, like so:
-#   aws ssm put-parameter \
-#     --name circleci-REPLACEME_WITH_STACK_NAME-rds-admin-user \
-#     --value REPLACEME_WITH_USERNAME \
-#     --type String
+# You will need to set an RDS password before you can provision RDS, like so:
 #   aws ssm put-parameter \
 #     --name circleci-REPLACEME_WITH_STACK_NAME-rds-admin-pass \
 #     --value REPLACEME_WITH_PASSWORD \
@@ -32,11 +28,9 @@ resource "aws_security_group" "postgres_ingress" {
 module "rds_postgres" {
   source = "terraform-aws-modules/rds/aws"
 
-  # db name only allows alphanumeric characters, so no hyphens
-  name              = "${var.application}${var.stack}db"
-  identifier        = "${var.application}${var.stack}db"
+  identifier        = "${var.application}-${var.stack}-db"
   engine            = "postgres"
-  engine_version    = "10.6"
+  engine_version    = "10.6" # Note that circle's implementation is currently running on postgres 9.5.15
   instance_class    = "${var.rds_instance}"
   allocated_storage = "${var.rds_allocated_storage}"
   storage_encrypted = true
@@ -44,10 +38,7 @@ module "rds_postgres" {
   # uncomment to use specific/non-default key
   # kms_key_id        = "arm:aws:kms:<region>:<account id>:key/<kms key id>"
 
-  # NOTE: Do NOT use 'user' as the value for 'username' as it throws:
-  # "Error creating DB Instance: InvalidParameterValue: MasterUsername
-  # user cannot be used as it is a reserved word used by the engine"
-  username = "${data.aws_ssm_parameter.rds_admin_user.value}"
+  username               = "circle"
   password               = "${data.aws_ssm_parameter.rds_admin_pass.value}"
   port                   = "5432"
   vpc_security_group_ids = ["${aws_security_group.postgres_ingress.id}"]
