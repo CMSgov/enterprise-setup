@@ -77,7 +77,6 @@ ExecStart=/usr/bin/nomad agent -config /etc/nomad/config.hcl
 [Install]
 WantedBy=multi-user.target
 EOT
-echo AWS_DEFAULT_REGION=us-gov-west-1 >> /etc/environment
 
 echo "--------------------------------------"
 echo "   Creating ci-privileged network"
