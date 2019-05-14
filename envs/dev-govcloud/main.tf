@@ -1,6 +1,6 @@
 locals {
   # UPDATE: set this to your stack (dev,prod,imp, etc)
-  stack = "dev"
+  stack       = "dev"
   application = "common-services"
 
   # UPDATE: set this to the front facing fqdn of your installation
@@ -8,13 +8,35 @@ locals {
 }
 
 module "app" {
-  source = "../../modules/cms"
-  stack  = "${local.stack}"
-  fqdn   = "${local.fqdn}"
+  source      = "../../modules/cms"
+  stack       = "${local.stack}"
+  fqdn        = "${local.fqdn}"
   application = "${local.application}"
 
   # Optional, install an ssh key
   aws_ssh_key_name = "circleci"
+}
+
+module "proxy" {
+  source      = "../../modules/ecr-proxy"
+  application = "${local.application}"
+  stack    = "${local.stack}"
+  alb_cert = "arn"
+  ecs      = false
+}
+#
+# Setup an ACM certificate for this environment
+#
+resource "aws_acm_certificate" "cert" {
+  domain_name       = "ecr-proxy-govcloud-dev.west.cms.gov"
+  validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+output "proxy_acm_validation" {
+  value = "${aws_acm_certificate.cert.domain_validation_options}"
 }
 
 #
@@ -29,6 +51,13 @@ output "acm_validation" {
 #
 output "elb_name" {
   value = "${module.app.elb_name}"
+}
+
+#
+# Proxy DNS Name
+#
+output "proxy_name" {
+  value = "${module.proxy.alb_name}"
 }
 
 #

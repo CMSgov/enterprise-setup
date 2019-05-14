@@ -16,7 +16,18 @@ module "app" {
   # Optional, install an ssh key
   aws_ssh_key_name = "circleci"
 }
+module "proxy" {
+  source   = "../../modules/ecr-proxy"
+  stack    = "${local.stack}"
+  alb_cert = "arn"
+}
 
+#
+# Proxy DNS Name
+#
+output "proxy_name" {
+  value = "${module.proxy.alb_name}"
+}
 #
 # Print out the ACM validation record
 #
