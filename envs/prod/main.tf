@@ -18,7 +18,7 @@ module "app" {
 module "proxy" {
   source   = "../../modules/ecr-proxy"
   stack    = "${local.stack}"
-  alb_cert = "arn"
+  alb_cert = "arn:aws:acm:us-west-2:249310508038:certificate/ff006c73-940a-420d-93a5-a15a5be88637"
 }
 
 #

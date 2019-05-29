@@ -9,6 +9,7 @@ resource "aws_lb" "lb" {
   name            = "${var.application}-${var.stack}-proxy-lb"
   subnets         = ["${module.network.private_subnet_ids}"]
   security_groups = ["${aws_security_group.lb.id}"]
+  internal        = true
 }
 
 output "alb_name" {
