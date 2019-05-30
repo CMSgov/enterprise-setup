@@ -29,6 +29,7 @@ module "rds_postgres" {
   source = "terraform-aws-modules/rds/aws"
 
   identifier        = "${var.application}-${var.stack}-db"
+  name              = "circle" # This creates a database with this name when the DB instance is created
   engine            = "postgres"
   engine_version    = "10.6" # Note that circle's implementation is currently running on postgres 9.5.15
   instance_class    = "${var.rds_instance}"
