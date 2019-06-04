@@ -222,14 +222,20 @@ Outputs:
   VPC:
     Description: VPC ID
     Value: !Ref VPC
+    Export:
+      Name: !Sub "${AWS::StackName}-VPCID"
 
   PublicSubnets:
     Description: A list of the public subnets
     Value: !Join [",", [!Ref Az1Public, !Ref Az2Public]]
+    Export:
+      Name: !Sub "${AWS::StackName}-PublicSubnets"
 
   PrivateSubnets:
     Description: A list of the private subnets
     Value: !Join [",", [!Ref Az1Private, !Ref Az2Private]]
+    Export:
+      Name: !Sub "${AWS::StackName}-PrivateSubnets"
 
   Nat1:
     Description: The NAT in the first AZ
