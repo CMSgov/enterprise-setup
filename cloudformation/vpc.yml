@@ -216,6 +216,15 @@ Resources:
       RouteTableId: !Ref Az2PrivateRouteTable
       SubnetId: !Ref Az2Private
 
+  EndpointS3:
+    Type: 'AWS::EC2::VPCEndpoint'
+    Properties:
+      RouteTableIds:
+        - !Ref PublicRouteTable
+        - !Ref Az1PrivateRouteTable
+        - !Ref Az2PrivateRouteTable
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.s3'
+      VpcId: !Ref VPC
 
 
 Outputs:
