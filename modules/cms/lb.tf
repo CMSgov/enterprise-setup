@@ -5,7 +5,7 @@ resource "aws_lb" "lb" {
   name            = "${local.prefix}-circle-lb"
   internal        = false
   security_groups = ["${aws_security_group.lb_ingress.id}"]
-  subnets         = ["${module.network.public_subnet_ids}"]
+  subnets         = [ "subnet-0cfc7af492dde5e78", "subnet-0828c32b63b89f8a6"] #["${module.network.public_subnet_ids}"]
   tags            = "${module.tags.application_tags}"
 
   #access_logs {
@@ -122,27 +122,15 @@ resource "aws_security_group" "lb_ingress" {
   vpc_id = "${module.network.vpc_id}"
   tags   = "${module.tags.application_tags}"
 
-  # For Web traffic to services
-  ingress {
-    cidr_blocks = ["0.0.0.0/0"]
-    protocol    = "tcp"
-    from_port   = 80
-    to_port     = 80
-  }
+
 
   ingress {
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks =  ["${var.ingress_ips}"]
     protocol    = "tcp"
     from_port   = 443
     to_port     = 443
   }
 
-  ingress {
-    cidr_blocks = ["0.0.0.0/0"]
-    protocol    = "tcp"
-    from_port   = 8800
-    to_port     = 8800
-  }
 
   egress {
     from_port       = 0
@@ -162,4 +150,3 @@ resource "aws_security_group" "lb_ingress" {
 #  default_allow  = false
 #  allow_elb      = true
 #}
-

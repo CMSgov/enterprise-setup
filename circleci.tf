@@ -281,9 +281,25 @@ resource "aws_security_group" "circleci_vm_sg" {
   }
 }
 
+data "aws_ami" "ubuntu" {
+    most_recent = true
+
+    filter {
+        name   = "name"
+        values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
+    }
+
+    filter {
+        name   = "virtualization-type"
+        values = ["hvm"]
+    }
+
+    owners = ["099720109477"] # Canonical
+}
+
 resource "aws_instance" "services" {
   instance_type               = "${var.services_instance_type}"
-  ami                         = "${var.services_ami != "" ? var.services_ami : lookup(var.ubuntu_ami, var.aws_region)}"
+  ami                         = "${data.aws_ami.ubuntu.id}"
   key_name                    = "${var.aws_ssh_key_name}"
   subnet_id                   = "${var.aws_subnet_id}"
   // CMS: disable public IP

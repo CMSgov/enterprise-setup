@@ -1,9 +1,9 @@
 locals {
   # UPDATE: set this to your stack (dev,prod,imp, etc)
-  stack = "dev"
+  stack = "devtj"
 
   # UPDATE: set this to the front facing fqdn of your installation
-  fqdn = "circleci-dev.west.cms.gov"
+  fqdn = "circleci-devtj.west.cms.gov"
 }
 
 module "app" {
@@ -11,6 +11,9 @@ module "app" {
   stack        = "${local.stack}"
   fqdn         = "${local.fqdn}"
   rds_instance = "db.m5.large"
+
+
+  ingress_ips = ["192.30.252.0/22", "185.199.108.0/22", "140.82.112.0/20", "52.20.26.200/32", "34.196.35.156/32"]
 
   # Optional, install an ssh key
   aws_ssh_key_name = "circleci"
@@ -42,6 +45,7 @@ provider "template" {
   version = "~> 1.0.0"
 }
 
+
 #
 # Configure Terraform
 #
@@ -53,7 +57,7 @@ terraform {
     bucket = "aws-cms-oit-iusg-draas-circleci-dev-us-west-2-terraform"
 
     # UPDATE: set this to your environment name
-    key = "circleci-dev/main.tfstate"
+    key = "circleci-devtj/main.tfstate"
 
     dynamodb_table = "terraform-lock"
     region         = "us-west-2"
