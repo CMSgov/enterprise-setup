@@ -2,10 +2,16 @@ Description: >
   Creates a baseline VPC to install a dev version of Circle CI into.
 
 Parameters:
+
   EnvironmentName:
     Description: An environment name that will be prefixed to resource names
     Type: String
     Default: dev
+
+  stack_name:
+    Description: Corresponds to the stack name of the circleci deploy, e.g. devtj
+    Type: String
+    Default: devtj
 
   VpcCIDR1:
     Description: Please enter the IP range (CIDR notation) for this VPC
@@ -48,6 +54,11 @@ Resources:
       Tags:
         - Key: Name
           Value: !Ref EnvironmentName
+        - Key: 'application'
+          Value: 'circleci'
+        - Key: 'stack'
+          Value: !Ref stack_name
+
 
   VpcCidrBlock:
     Type: AWS::EC2::VPCCidrBlock
@@ -79,6 +90,12 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName}-Az1Public
+        - Key: 'application'
+          Value: 'circleci'
+        - Key: 'stack'
+          Value: !Ref stack_name
+        - Key: 'use'
+          Value: 'public'
 
   Az2Public:
     Type: AWS::EC2::Subnet
@@ -91,6 +108,12 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName}-Az2Public
+        - Key: 'application'
+          Value: 'circleci'
+        - Key: 'stack'
+          Value: !Ref stack_name
+        - Key: 'use'
+          Value: 'public'
 
   Az1Private:
     Type: AWS::EC2::Subnet
@@ -103,6 +126,12 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName}-Az1Private
+        - Key: 'application'
+          Value: 'circleci'
+        - Key: 'stack'
+          Value: !Ref stack_name
+        - Key: 'use'
+          Value: 'private'
 
   Az2Private:
     Type: AWS::EC2::Subnet
@@ -115,6 +144,13 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName}-Az2Private
+        - Key: 'application'
+          Value: 'circleci'
+        - Key: 'stack'
+          Value: !Ref stack_name
+        - Key: 'use'
+          Value: 'private'
+
 
   NatGateway1EIP:
     Type: AWS::EC2::EIP
