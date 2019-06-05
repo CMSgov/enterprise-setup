@@ -8,7 +8,7 @@ Parameters:
     Type: String
     Default: dev
 
-  stack_name:
+  TagStackName:
     Description: Corresponds to the stack name of the circleci deploy, e.g. devtj
     Type: String
     Default: devtj
@@ -57,7 +57,7 @@ Resources:
         - Key: 'application'
           Value: 'circleci'
         - Key: 'stack'
-          Value: !Ref stack_name
+          Value: !Ref TagStackName
 
 
   VpcCidrBlock:
@@ -93,7 +93,7 @@ Resources:
         - Key: 'application'
           Value: 'circleci'
         - Key: 'stack'
-          Value: !Ref stack_name
+          Value: !Ref TagStackName
         - Key: 'use'
           Value: 'public'
 
@@ -111,7 +111,7 @@ Resources:
         - Key: 'application'
           Value: 'circleci'
         - Key: 'stack'
-          Value: !Ref stack_name
+          Value: !Ref TagStackName
         - Key: 'use'
           Value: 'public'
 
@@ -129,7 +129,7 @@ Resources:
         - Key: 'application'
           Value: 'circleci'
         - Key: 'stack'
-          Value: !Ref stack_name
+          Value: !Ref TagStackName
         - Key: 'use'
           Value: 'private'
 
@@ -147,7 +147,7 @@ Resources:
         - Key: 'application'
           Value: 'circleci'
         - Key: 'stack'
-          Value: !Ref stack_name
+          Value: !Ref TagStackName
         - Key: 'use'
           Value: 'private'
 
