@@ -34,3 +34,8 @@ variable "rds_allocated_storage" {
 variable "application" {
   default = "circleci"
 }
+
+variable "ingress_ips" {
+  type         = "list"
+  description  = "List of IPs which should have access to this CircleCI"
+}
