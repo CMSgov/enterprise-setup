@@ -115,7 +115,7 @@ resource "aws_lb_target_group_attachment" "http" {
 }
 
 #
-# All all inbound to 443 for both VPN and GIT IPs
+# All all inbound to 443 for both VPN and GIT IPs, 8800 for VPN only
 #
 resource "aws_security_group" "lb_ingress" {
   name   = "${local.prefix}-lb-ingress"
@@ -123,6 +123,7 @@ resource "aws_security_group" "lb_ingress" {
   tags   = "${module.tags.application_tags}"
 
   # For Web traffic to services
+
   ingress {
     cidr_blocks =  ["${var.ingress_git_ips}"]
     protocol    = "tcp"
