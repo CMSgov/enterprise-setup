@@ -137,6 +137,8 @@ resource "aws_security_group" "lb_ingress" {
     to_port     = 443
   }
 
+# Admin panel through VPN only
+
   ingress {
     cidr_blocks =  ["${var.ingress_vpn_ips}"]
     protocol    = "tcp"
