@@ -15,7 +15,8 @@ module "app" {
   
   # CMS VPN = 52.20.26.200/32, 34.196.35.156/32
   # CMS Github Ent IP: 52.203.194.136/32
-  ingress_ips = ["52.203.194.136/32", "52.20.26.200/32", "34.196.35.156/32"]
+  ingress_git_ips = ["52.203.194.136/32"]
+  ingress_vpn_ips = ["52.20.26.200/32", "34.196.35.156/32"]
   
   # Optional, install an ssh key
   aws_ssh_key_name = "circleci"

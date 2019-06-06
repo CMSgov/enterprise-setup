@@ -35,7 +35,12 @@ variable "application" {
   default = "circleci"
 }
 
-variable "ingress_ips" {
+variable "ingress_git_ips" {
   type         = "list"
-  description  = "List of IPs which should have access to this CircleCI"
+  description  = "List of git webhook IPs which should have access to this CircleCI"
+}
+
+variable "ingress_vpn_ips" {
+  type         = "list"
+  description  = "List of vpn IPs which should have access to this CircleCI"
 }

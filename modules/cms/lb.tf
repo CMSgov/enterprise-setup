@@ -115,7 +115,7 @@ resource "aws_lb_target_group_attachment" "http" {
 }
 
 #
-# All all inbound to 80 and 443
+# All all inbound to 443 for both VPN and GIT IPs
 #
 resource "aws_security_group" "lb_ingress" {
   name   = "${local.prefix}-lb-ingress"
@@ -124,10 +124,24 @@ resource "aws_security_group" "lb_ingress" {
 
   # For Web traffic to services
   ingress {
-    cidr_blocks =  ["${var.ingress_ips}"]
+    cidr_blocks =  ["${var.ingress_git_ips}"]
     protocol    = "tcp"
     from_port   = 443
     to_port     = 443
+  }
+  
+  ingress {
+    cidr_blocks =  ["${var.ingress_vpn_ips}"]
+    protocol    = "tcp"
+    from_port   = 443
+    to_port     = 443
+  }
+
+  ingress {
+    cidr_blocks =  ["${var.ingress_vpn_ips}"]
+    protocol    = "tcp"
+    from_port   = 8800
+    to_port     = 8800
   }
 
   egress {
