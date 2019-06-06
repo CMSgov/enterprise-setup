@@ -126,6 +126,7 @@ resource "aws_security_group" "lb_ingress" {
 
   ingress {
     cidr_blocks =  ["${var.ingress_git_ips}"]
+    description = "github ingress"
     protocol    = "tcp"
     from_port   = 443
     to_port     = 443
@@ -133,6 +134,7 @@ resource "aws_security_group" "lb_ingress" {
   
   ingress {
     cidr_blocks =  ["${var.ingress_vpn_ips}"]
+    description = "vpn ingress"
     protocol    = "tcp"
     from_port   = 443
     to_port     = 443
@@ -142,6 +144,7 @@ resource "aws_security_group" "lb_ingress" {
 
   ingress {
     cidr_blocks =  ["${var.ingress_vpn_ips}"]
+    description = "vpn admin panel ingress"
     protocol    = "tcp"
     from_port   = 8800
     to_port     = 8800
