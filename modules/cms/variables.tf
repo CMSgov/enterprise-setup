@@ -34,3 +34,13 @@ variable "rds_allocated_storage" {
 variable "application" {
   default = "circleci"
 }
+
+variable "ingress_git_ips" {
+  type         = "list"
+  description  = "List of git webhook IPs which should have access to this CircleCI"
+}
+
+variable "ingress_vpn_ips" {
+  type         = "list"
+  description  = "List of vpn IPs which should have access to this CircleCI"
+}
