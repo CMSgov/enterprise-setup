@@ -86,7 +86,7 @@ Resources:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [0, !GetAZs ""]
       CidrBlock: !Ref Az1PublicCIDR
-      MapPublicIpOnLaunch: true
+      MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName}-Az1Public
@@ -104,7 +104,7 @@ Resources:
       VpcId: !Ref VPC
       AvailabilityZone: !Select [1, !GetAZs ""]
       CidrBlock: !Ref Az2PublicCIDR
-      MapPublicIpOnLaunch: true
+      MapPublicIpOnLaunch: false
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName}-Az2Public
