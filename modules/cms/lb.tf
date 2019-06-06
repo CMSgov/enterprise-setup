@@ -146,6 +146,8 @@ resource "aws_security_group" "lb_ingress" {
     to_port     = 8800
   }
 
+# Permit out traffic
+
   egress {
     from_port       = 0
     to_port         = 0
