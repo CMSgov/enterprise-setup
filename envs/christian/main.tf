@@ -1,9 +1,13 @@
+# TODO: remove the dynamodb lock table, remove s3 state file & folder, destroy jump instance
+# TODO: document how to set RDS admin password somewhere more prominent
+
+
 locals {
   # UPDATE: set this to your stack (dev,prod,imp, etc)
-  stack = "dev"
+  stack = "christian"
 
   # UPDATE: set this to the front facing fqdn of your installation
-  fqdn = "circleci-dev.west.cms.gov"
+  fqdn = "circleci-christian.west.cms.gov"
 }
 
 module "app" {
@@ -11,12 +15,7 @@ module "app" {
   stack                   = "${local.stack}"
   fqdn                    = "${local.fqdn}"
   rds_instance            = "db.m5.large"
-  rds_snapshot_identifier = "christian-2019-05-30-13-48est"
-
-  # CMS VPN = 52.20.26.200, 34.196.35.156
-  # Remaining IPs are Github WebHooks https://help.github.com/en/articles/about-githubs-ip-addresses
-  ingress_git_ips = ["192.30.252.0/22", "185.199.108.0/22", "140.82.112.0/20"]
-  ingress_vpn_ips = ["52.20.26.200/32", "34.196.35.156/32"]
+  # rds_snapshot_identifier = "christian-2019-05-30-13-48est"
 
   # Optional, install an ssh key
   aws_ssh_key_name = "circleci"
@@ -59,9 +58,9 @@ terraform {
     bucket = "aws-cms-oit-iusg-draas-circleci-dev-us-west-2-terraform"
 
     # UPDATE: set this to your environment name
-    key = "circleci-dev/main.tfstate"
+    key = "circleci-christian/main.tfstate"
 
-    dynamodb_table = "terraform-lock"
+    dynamodb_table = "terraform-lock-christian"
     region         = "us-west-2"
     encrypt        = "true"
   }
